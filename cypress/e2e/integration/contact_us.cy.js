@@ -13,7 +13,7 @@ describe("Test Contact Us from via Web", ()=>{
     });
 
 
-    //if we type it.only , only eork second 
+    //if we type it.only , only work second 
     it("Should not be able to sumbit a succesful submission via contact us from as all fields are requeared ",()=>{
         cy.visit("https://www.webdriveruniversity.com/Contact-Us/contactus.html");
         cy.get('[name="first_name"]').type("Tom");

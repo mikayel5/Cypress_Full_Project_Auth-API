@@ -9,8 +9,12 @@ describe("Inspect Authomation test Store items using chain of commands", () => {
     })
 
     it.only("Click on the first istem using header", ()=>{
-        cy.visit("https://www.automationteststore.com/");
-        cy.get('.prdocutname').contains('Total Moisture Facial Cream').click()// best for 
+        // cy.visit("https://www.automationteststore.com/");
+        // cy.get('.prdocutname').contains('Total Moisture Facial Cream').click().then
+
+        cy.get('.prdocutname').contains('Total Moisture Facial Cream').click().then(function(itemHeaderText){
+            console.log("Selected the following item: " + itemHeaderText.text())
+        })
     })
 
     it("Click on the first istem using header", ()=>{
