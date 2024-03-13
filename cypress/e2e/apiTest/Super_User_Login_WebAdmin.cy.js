@@ -1,5 +1,7 @@
 /// <reference types="cypress" />
 
+const Ajv = require('ajv');
+const avj = new Ajv()
 
 describe("Login-WebAdmin", () => {
 
@@ -146,7 +148,6 @@ var clientData = ""; // Function to get fake user data using cy.request
 
  var  birthName= "Leonid-12345";
 
- console.log("birt", Birthdate);
 
 
   const createClient = function (firstN, lastN) {
@@ -175,6 +176,27 @@ var clientData = ""; // Function to get fake user data using cy.request
         SwarmRegistrationSource: 100,
       },
     }).then((response) => {
+      const schema = {
+        "type": "object",
+        "required": ["StatusCode", "Data"],
+        "properties": {
+          "StatusCode": {"type": "string"},
+          "Data": {
+            "type": "object",
+            "properties": {
+              "UserId": {"type": "integer"},
+              "UserName": {"type": "string"},
+              "CurrencyId":{"type":"string"},
+            },
+            "required": ["UserId", "UserName","CurrencyId",]
+          }
+        },
+        
+      }; // end Shcema
+      const validate = avj.compile(schema)
+      const isvalid = validate(response.body)
+      cy.log("Schema validation", isvalid)
+      expect(isvalid).to.be.true
       expect(response.status).to.eq(200);
         userId = response.body.Data.userId;
         currencyId = response.body.Data.currencyId;
@@ -187,7 +209,7 @@ let userId = null;
 let currencyId = null;
 let loginEmail = null;
 
-  it("Create client and login", () => {
+  it.only("Create client and login", () => {
     getFakeUserData().then((clientData) => {
       createClient(clientData.firstname, clientData.lastname);
     });
